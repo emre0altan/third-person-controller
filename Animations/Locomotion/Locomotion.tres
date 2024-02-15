@@ -1,0 +1,8 @@
+[gd_resource type="AnimationLibrary" load_steps=2 format=3 uid="uid://cvcfl3mpoqfom"]
+
+[ext_resource type="Animation" uid="uid://ynobdldofr8k" path="res://Animations/Locomotion/idle.res" id="1_d7njl"]
+
+[resource]
+_data = {
+"idle": ExtResource("1_d7njl")
+}

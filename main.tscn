@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://dypwjkhp7orph"]
+
+[ext_resource type="PackedScene" uid="uid://da04fplm6q0s8" path="res://Character/Y_bot.tscn" id="1_h6ukl"]
+
+[node name="main" type="Node3D"]
+
+[node name="CSGBox3D" type="CSGBox3D" parent="."]
+transform = Transform3D(10, 0, 0, 0, 0.1, 0, 0, 0, 10, 0, -0.05, 0)
+use_collision = true
+
+[node name="Y_bot" parent="." instance=ExtResource("1_h6ukl")]
