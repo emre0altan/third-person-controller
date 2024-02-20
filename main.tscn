@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://baya4d7lipxh7"]
+[gd_scene load_steps=9 format=3 uid="uid://baya4d7lipxh7"]
 
 [ext_resource type="PackedScene" uid="uid://bbee70e3wi30c" path="res://Character/vanguard.tscn" id="1_er0sh"]
 [ext_resource type="Script" path="res://CameraController.gd" id="2_mnsbx"]
@@ -7,7 +7,24 @@
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_e2f3f"]
 
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_6ujd6"]
+
+[sub_resource type="Sky" id="Sky_4jclj"]
+sky_material = SubResource("ProceduralSkyMaterial_6ujd6")
+
+[sub_resource type="Environment" id="Environment_0ja6k"]
+background_mode = 2
+sky = SubResource("Sky_4jclj")
+ambient_light_source = 3
+ambient_light_color = Color(0.713726, 0.713726, 0.713726, 1)
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_76plc"]
+
 [node name="Node3D" type="Node3D"]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
+shadow_enabled = true
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(9.56283, 0, 0, 0, 0.0502658, 0, 0, 0, 9.6963, 0, -0.0553523, 0)
@@ -18,15 +35,26 @@ mesh = SubResource("BoxMesh_d8fi4")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D/StaticBody3D"]
 shape = SubResource("BoxShape3D_e2f3f")
 
-[node name="vanguard" parent="." groups=["vanguard"] instance=ExtResource("1_er0sh")]
+[node name="vanguard" parent="." instance=ExtResource("1_er0sh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 
-[node name="Node3D" type="Node3D" parent="." groups=["CameraController"]]
+[node name="CameraController" type="Node3D" parent="." node_paths=PackedStringArray("character", "camera", "lookAt")]
 script = ExtResource("2_mnsbx")
+character = NodePath("../vanguard")
+camera = NodePath("SpringArm3D/Camera3D")
+lookAt = NodePath("SpringArm3D/Camera3D/LookAt")
 
-[node name="SpringArm3D" type="SpringArm3D" parent="Node3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.54755, 0)
+[node name="SpringArm3D" type="SpringArm3D" parent="CameraController"]
+transform = Transform3D(-1, 8.74228e-08, 0, 8.74228e-08, 1, -8.74228e-08, -7.64274e-15, -8.74228e-08, -1, 0, 1.54, 0)
 collision_mask = 2
 spring_length = 5.0
 
-[node name="Camera3D" type="Camera3D" parent="Node3D/SpringArm3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3.76199)
+[node name="Camera3D" type="Camera3D" parent="CameraController/SpringArm3D" groups=["CameraController"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5)
+
+[node name="LookAt" type="Node3D" parent="CameraController/SpringArm3D/Camera3D"]
+transform = Transform3D(1, 6.6815e-22, 0, 6.6815e-22, 1, 0, 0, 0, 1, -5.68434e-14, -5.96046e-07, -6.86751)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_0ja6k")
+camera_attributes = SubResource("CameraAttributesPractical_76plc")

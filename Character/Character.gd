@@ -26,5 +26,6 @@ func _physics_process(delta):
 	else:
 		$AnimationTree.set("parameters/conditions/jump", false)
 	velocity = $AnimationTree.get_root_motion_position() / delta
-	
+	var rotatedVel  = -velocity.rotated(Vector3.UP, h_rot)
+	velocity = Vector3(rotatedVel.x, -gravity, rotatedVel.z)
 	move_and_slide()
