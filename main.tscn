@@ -1,7 +1,8 @@
-[gd_scene load_steps=9 format=3 uid="uid://baya4d7lipxh7"]
+[gd_scene load_steps=10 format=3 uid="uid://baya4d7lipxh7"]
 
 [ext_resource type="PackedScene" uid="uid://bbee70e3wi30c" path="res://Character/vanguard.tscn" id="1_er0sh"]
 [ext_resource type="Script" path="res://CameraController.gd" id="2_mnsbx"]
+[ext_resource type="PackedScene" uid="uid://bs5f32t7p8xo8" path="res://city_single.glb" id="3_0acb4"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_d8fi4"]
 
@@ -36,7 +37,7 @@ mesh = SubResource("BoxMesh_d8fi4")
 shape = SubResource("BoxShape3D_e2f3f")
 
 [node name="vanguard" parent="." instance=ExtResource("1_er0sh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.859, 11.904)
 
 [node name="CameraController" type="Node3D" parent="." node_paths=PackedStringArray("character", "camera", "lookAt")]
 script = ExtResource("2_mnsbx")
@@ -58,3 +59,5 @@ transform = Transform3D(1, 6.6815e-22, 0, 6.6815e-22, 1, 0, 0, 0, 1, -5.68434e-1
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_0ja6k")
 camera_attributes = SubResource("CameraAttributesPractical_76plc")
+
+[node name="city_single" parent="." instance=ExtResource("3_0acb4")]
