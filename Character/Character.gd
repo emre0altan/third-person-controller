@@ -20,12 +20,19 @@ func _physics_process(delta):
 	var direction = Vector3(h * boost_mult, 0, v * boost_mult)
 	blend_position = lerp(blend_position, Vector2(-direction.x, direction.z), blend_weight)
 	$AnimationTree.set("parameters/Movement/blend_position", blend_position)
+	$AnimationTree.set("parameters/Crouch/blend_position", blend_position)
 	if Input.is_action_pressed("ui_accept"):
 		$AnimationTree.set("parameters/conditions/jump", true)
 		$AnimationTree.set("parameters/Jump/blend_position", blend_position.y)
 	else:
 		$AnimationTree.set("parameters/conditions/jump", false)
+	if Input.is_action_pressed("crouch"):
+		$AnimationTree.set("parameters/conditions/crouching", true)
+		$AnimationTree.set("parameters/conditions/not_crouching", false)
+	else:
+		$AnimationTree.set("parameters/conditions/crouching", false)
+		$AnimationTree.set("parameters/conditions/not_crouching", true)
 	velocity = $AnimationTree.get_root_motion_position() / delta
 	var rotatedVel  = -velocity.rotated(Vector3.UP, h_rot)
-	velocity = Vector3(rotatedVel.x, -gravity, rotatedVel.z)
+	velocity = Vector3(rotatedVel.x, velocity.y - gravity*delta, rotatedVel.z)
 	move_and_slide()

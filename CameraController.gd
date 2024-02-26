@@ -11,7 +11,6 @@ func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	pass # Replace with function body.
 
-
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	global_position = character.global_position
@@ -25,9 +24,8 @@ func _process(delta):
 func _input(event):
 	if event is InputEventMouseMotion:
 		rotation = Vector3(
-			clamp(rotation.x - event.relative.y / 1000 * sensitivity, -0.2, 0.75),
+			clamp(rotation.x + event.relative.y / 1000 * sensitivity, -0.2, 0.75),
 			rotation.y - event.relative.x / 1000 * sensitivity, 
 			0
 		)
-	
 	pass

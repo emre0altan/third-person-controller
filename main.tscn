@@ -1,12 +1,8 @@
-[gd_scene load_steps=10 format=3 uid="uid://baya4d7lipxh7"]
+[gd_scene load_steps=8 format=3 uid="uid://baya4d7lipxh7"]
 
 [ext_resource type="PackedScene" uid="uid://bbee70e3wi30c" path="res://Character/vanguard.tscn" id="1_er0sh"]
 [ext_resource type="Script" path="res://CameraController.gd" id="2_mnsbx"]
 [ext_resource type="PackedScene" uid="uid://bs5f32t7p8xo8" path="res://city_single.glb" id="3_0acb4"]
-
-[sub_resource type="BoxMesh" id="BoxMesh_d8fi4"]
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_e2f3f"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_6ujd6"]
 
@@ -17,27 +13,30 @@ sky_material = SubResource("ProceduralSkyMaterial_6ujd6")
 background_mode = 2
 sky = SubResource("Sky_4jclj")
 ambient_light_source = 3
-ambient_light_color = Color(0.713726, 0.713726, 0.713726, 1)
+ambient_light_color = Color(0.556863, 0.752941, 0.807843, 1)
+glow_enabled = true
+glow_bloom = 0.09
+fog_light_color = Color(0.576471, 0.54902, 0.47451, 1)
+fog_sun_scatter = 1.0
+fog_sky_affect = 0.58
+volumetric_fog_enabled = true
+volumetric_fog_albedo = Color(0.839216, 0.807843, 0.713726, 1)
 
 [sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_76plc"]
+dof_blur_far_enabled = true
+dof_blur_far_distance = 11.91
+dof_blur_far_transition = 169.66
+dof_blur_near_enabled = true
 
 [node name="Node3D" type="Node3D"]
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
+transform = Transform3D(-0.863347, -0.469972, -0.183735, -0.125554, -0.152596, 0.980281, -0.488742, 0.869391, 0.0727364, 0, 0, 0)
+light_color = Color(1, 1, 0.87451, 1)
 shadow_enabled = true
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(9.56283, 0, 0, 0, 0.0502658, 0, 0, 0, 9.6963, 0, -0.0553523, 0)
-mesh = SubResource("BoxMesh_d8fi4")
-
-[node name="StaticBody3D" type="StaticBody3D" parent="MeshInstance3D"]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D/StaticBody3D"]
-shape = SubResource("BoxShape3D_e2f3f")
-
 [node name="vanguard" parent="." instance=ExtResource("1_er0sh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.859, 11.904)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5.40503, 11.904)
 
 [node name="CameraController" type="Node3D" parent="." node_paths=PackedStringArray("character", "camera", "lookAt")]
 script = ExtResource("2_mnsbx")

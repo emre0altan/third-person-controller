@@ -1,4 +1,4 @@
-[gd_scene load_steps=49 format=3 uid="uid://bbee70e3wi30c"]
+[gd_scene load_steps=60 format=3 uid="uid://bbee70e3wi30c"]
 
 [ext_resource type="Script" path="res://Character/Character.gd" id="1_x8r7q"]
 [ext_resource type="PackedScene" uid="uid://bjicvvueirlos" path="res://Models/Character/vanguard.glb" id="1_ykjuu"]
@@ -7,6 +7,9 @@
 [ext_resource type="Animation" uid="uid://23vjvjyht1w" path="res://Animations/Locomotion/jump_running_backward.res" id="5_2qpdr"]
 [ext_resource type="Curve" uid="uid://clcwjxj5an6rp" path="res://Character/xfadeCurveSin.tres" id="6_upbwv"]
 [ext_resource type="Animation" uid="uid://b2dvyrlbhqkw" path="res://Animations/Locomotion/running_backward.res" id="6_wf1hj"]
+[ext_resource type="Animation" uid="uid://c6qgxcu8piy8g" path="res://Animations/Locomotion/crouching_idle.res" id="7_gmsgd"]
+[ext_resource type="Animation" uid="uid://cqq6er2fuqtqp" path="res://Animations/Locomotion/crouch_to_stand.res" id="8_msj5x"]
+[ext_resource type="Animation" uid="uid://qvda4y31e7b3" path="res://Animations/Locomotion/crouched_walking.res" id="9_xlaa0"]
 
 [sub_resource type="Animation" id="Animation_eeyxk"]
 resource_name = "Jog Backward Diagonal Left"
@@ -6153,11 +6156,36 @@ _data = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_hdh7p"]
 _data = {
+"crouch_to_stand": ExtResource("8_msj5x"),
+"crouched_walking": ExtResource("9_xlaa0"),
+"crouching_idle": ExtResource("7_gmsgd"),
 "jump": ExtResource("3_g64v6"),
 "jump_running_backward": ExtResource("5_2qpdr"),
 "jump_running_forward": ExtResource("4_cxoi5"),
 "running_backward": ExtResource("6_wf1hj")
 }
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_0estv"]
+animation = &"Locomotion/crouching_idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_e7hp5"]
+animation = &"Locomotion/crouching_idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_eamab"]
+animation = &"Locomotion/crouching_idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_gsbw8"]
+animation = &"Locomotion/crouched_walking"
+
+[sub_resource type="AnimationNodeBlendSpace2D" id="AnimationNodeBlendSpace2D_c188q"]
+blend_point_0/node = SubResource("AnimationNodeAnimation_0estv")
+blend_point_0/pos = Vector2(0, 0)
+blend_point_1/node = SubResource("AnimationNodeAnimation_e7hp5")
+blend_point_1/pos = Vector2(-1, 0)
+blend_point_2/node = SubResource("AnimationNodeAnimation_eamab")
+blend_point_2/pos = Vector2(1, 0)
+blend_point_3/node = SubResource("AnimationNodeAnimation_gsbw8")
+blend_point_3/pos = Vector2(0, 0.5)
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_l3k1i"]
 animation = &"Locomotion/jump_running_forward"
@@ -6175,6 +6203,9 @@ blend_point_1/node = SubResource("AnimationNodeAnimation_rcwgy")
 blend_point_1/pos = 0.0
 blend_point_2/node = SubResource("AnimationNodeAnimation_c35vf")
 blend_point_2/pos = -0.1
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_p3ptp"]
+animation = &"Locomotion/crouch_to_stand"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_lkefw"]
 animation = &"idle"
@@ -6260,14 +6291,31 @@ xfade_curve = ExtResource("6_upbwv")
 switch_mode = 2
 advance_mode = 2
 
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_6pxl7"]
+xfade_time = 0.5
+xfade_curve = ExtResource("6_upbwv")
+advance_mode = 2
+advance_condition = &"crouching"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_r7haj"]
+xfade_time = 0.5
+xfade_curve = ExtResource("6_upbwv")
+switch_mode = 1
+advance_mode = 2
+advance_condition = &"not_crouching"
+
 [sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_b2d5f"]
+states/Crouch/node = SubResource("AnimationNodeBlendSpace2D_c188q")
+states/Crouch/position = Vector2(479.113, -93.6)
 states/Jump/node = SubResource("AnimationNodeBlendSpace1D_16f8u")
-states/Jump/position = Vector2(463.556, 167)
+states/Jump/position = Vector2(478.756, 229.329)
+states/Locomotion_crouch_to_stand/node = SubResource("AnimationNodeAnimation_p3ptp")
+states/Locomotion_crouch_to_stand/position = Vector2(766.6, -10.4)
 states/Movement/node = SubResource("AnimationNodeBlendSpace2D_twu4t")
-states/Movement/position = Vector2(463.408, 36.8888)
+states/Movement/position = Vector2(478.608, 99.2178)
 states/Start/position = Vector2(191, 100)
-transitions = ["Start", "Movement", SubResource("AnimationNodeStateMachineTransition_v330k"), "Movement", "Jump", SubResource("AnimationNodeStateMachineTransition_bi44n"), "Jump", "Movement", SubResource("AnimationNodeStateMachineTransition_vysee")]
-graph_offset = Vector2(-104, -103)
+transitions = ["Start", "Movement", SubResource("AnimationNodeStateMachineTransition_v330k"), "Movement", "Jump", SubResource("AnimationNodeStateMachineTransition_bi44n"), "Jump", "Movement", SubResource("AnimationNodeStateMachineTransition_vysee"), "Movement", "Crouch", SubResource("AnimationNodeStateMachineTransition_6pxl7"), "Crouch", "Movement", SubResource("AnimationNodeStateMachineTransition_r7haj")]
+graph_offset = Vector2(-60, -128)
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_nc2xw"]
 
@@ -6276,17 +6324,17 @@ script = ExtResource("1_x8r7q")
 
 [node name="Skeleton3D" parent="Armature" index="0"]
 bones/0/position = Vector3(0.00184204, -2.22883e-09, 0.00934839)
-bones/1/position = Vector3(0.0016135, 1.05109, 0.0111171)
-bones/1/rotation = Quaternion(-0.0351697, -0.0435453, -0.0246741, 0.998127)
-bones/2/rotation = Quaternion(-0.0460724, 0.0132188, 0.0281387, 0.998454)
-bones/3/rotation = Quaternion(0.00937785, 0.00159167, 0.0147058, 0.999847)
-bones/4/rotation = Quaternion(0.0827401, 0.00268199, 0.0123154, 0.996491)
-bones/5/rotation = Quaternion(0.0463068, -0.00225439, 0.00568737, 0.998909)
-bones/6/rotation = Quaternion(-0.0675539, 0.009271, -0.00159006, 0.997671)
-bones/8/rotation = Quaternion(0.679806, 0.327324, -0.49665, 0.429025)
-bones/9/rotation = Quaternion(0.484378, 0.137187, 0.108037, 0.857255)
-bones/10/rotation = Quaternion(-4.32491e-07, -2.33363e-08, 0.0136365, 0.999907)
-bones/11/rotation = Quaternion(0.0525588, -0.279706, 0.0260554, 0.958292)
+bones/1/position = Vector3(0.0016135, 1.05091, 0.0111171)
+bones/1/rotation = Quaternion(-0.0378073, -0.0406693, -0.026486, 0.998106)
+bones/2/rotation = Quaternion(-0.0420242, 0.0145482, 0.0284248, 0.998606)
+bones/3/rotation = Quaternion(0.00994738, 0.00179259, 0.014654, 0.999842)
+bones/4/rotation = Quaternion(0.0829106, 0.00289567, 0.0122988, 0.996477)
+bones/5/rotation = Quaternion(0.0517761, -0.00238821, 0.00325935, 0.998651)
+bones/6/rotation = Quaternion(-0.0736752, 0.00662758, -0.00180214, 0.997259)
+bones/8/rotation = Quaternion(0.685052, 0.320243, -0.496337, 0.426378)
+bones/9/rotation = Quaternion(0.475936, 0.133437, 0.109904, 0.862323)
+bones/10/rotation = Quaternion(-4.16448e-07, -1.71741e-08, 0.0134535, 0.99991)
+bones/11/rotation = Quaternion(0.0459438, -0.284505, 0.0273422, 0.957183)
 bones/12/rotation = Quaternion(0.179002, 0.0734725, 0.23464, 0.95263)
 bones/13/rotation = Quaternion(-0.0710369, 0.0865948, -0.270506, 0.956181)
 bones/14/rotation = Quaternion(-0.122968, -0.0755407, -0.0101774, 0.989479)
@@ -6302,10 +6350,10 @@ bones/26/rotation = Quaternion(0.155218, 2.12841e-06, -0.0158936, 0.987752)
 bones/28/rotation = Quaternion(0.233867, -0.00350516, -0.0490076, 0.971026)
 bones/29/rotation = Quaternion(0.151258, 8.49817e-07, -0.0154954, 0.988373)
 bones/30/rotation = Quaternion(0.143498, -2.72938e-07, -0.0147076, 0.989541)
-bones/32/rotation = Quaternion(0.684331, -0.319144, 0.514086, 0.406883)
-bones/33/rotation = Quaternion(0.400767, -0.229111, -0.124124, 0.878344)
+bones/32/rotation = Quaternion(0.687549, -0.314975, 0.512291, 0.406972)
+bones/33/rotation = Quaternion(0.403182, -0.228416, -0.120363, 0.877943)
 bones/34/rotation = Quaternion(-3.94434e-07, 3.86384e-08, -0.0583806, 0.998294)
-bones/35/rotation = Quaternion(0.0543603, 0.174143, -0.00428255, 0.983209)
+bones/35/rotation = Quaternion(0.0560776, 0.176948, -0.00413372, 0.982613)
 bones/36/rotation = Quaternion(0.18115, -0.0641324, -0.252532, 0.948314)
 bones/37/rotation = Quaternion(-0.0635771, -0.0761453, 0.3059, 0.946882)
 bones/38/rotation = Quaternion(-0.156385, 0.0746764, 0.0170436, 0.984722)
@@ -6321,13 +6369,13 @@ bones/50/rotation = Quaternion(0.155543, -2.01314e-06, 0.0122501, 0.987753)
 bones/52/rotation = Quaternion(0.228605, 0.00340276, 0.0423824, 0.97259)
 bones/53/rotation = Quaternion(0.15158, 6.50172e-08, 0.0119489, 0.988373)
 bones/54/rotation = Quaternion(0.143803, -1.07175e-07, 0.0113355, 0.989541)
-bones/56/rotation = Quaternion(-0.0935602, 0.00132319, 0.995338, -0.0233699)
-bones/57/rotation = Quaternion(-0.127246, 0.0840395, -0.0314494, 0.987804)
-bones/58/rotation = Quaternion(0.483449, 0.0674047, -0.0289392, 0.872293)
-bones/59/rotation = Quaternion(0.410394, 0.0414388, 0.00507409, 0.910952)
-bones/61/rotation = Quaternion(0.133917, 0.0850178, 0.984327, -0.07706)
-bones/62/rotation = Quaternion(-0.160164, -0.0125507, 0.0379551, 0.986281)
-bones/63/rotation = Quaternion(0.43427, -0.0696886, -0.00696029, 0.898056)
+bones/56/rotation = Quaternion(-0.0935618, -0.000375877, 0.995268, -0.0262051)
+bones/57/rotation = Quaternion(-0.131323, 0.0839801, -0.0322095, 0.987251)
+bones/58/rotation = Quaternion(0.487114, 0.0702622, -0.0297364, 0.869999)
+bones/59/rotation = Quaternion(0.4108, 0.0414947, 0.00507962, 0.910766)
+bones/61/rotation = Quaternion(0.136834, 0.0872963, 0.983406, -0.0810456)
+bones/62/rotation = Quaternion(-0.169393, -0.00514049, 0.0374666, 0.984823)
+bones/63/rotation = Quaternion(0.4383, -0.0701026, -0.00715969, 0.896062)
 bones/64/rotation = Quaternion(0.394345, -0.0392295, -0.00485887, 0.918112)
 
 [node name="AnimationPlayer" parent="." index="1"]
@@ -6345,7 +6393,10 @@ libraries = {
 }
 tree_root = SubResource("AnimationNodeStateMachine_b2d5f")
 anim_player = NodePath("../AnimationPlayer")
+parameters/conditions/crouching = false
 parameters/conditions/jump = false
+parameters/conditions/not_crouching = false
+parameters/Crouch/blend_position = Vector2(0, 0)
 parameters/Jump/blend_position = 0.0
 parameters/Movement/blend_position = Vector2(0, 0)
 
